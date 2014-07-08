@@ -505,7 +505,7 @@
         }
 
         if (startDate && endDate) {
-            formattedDateRange += '&nbsp;&ndash;&nbsp;';
+            formattedDateRange += ' &ndash; ';
         }
 
         if (endDate) {
