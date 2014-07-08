@@ -452,8 +452,8 @@
         var END_TAG = '</span>';
 
         function parseResult(startDate, endDate) {
-            return START_TAG + startDate + END_TAG + '&nbsp;&ndash;&nbsp;' + START_TAG + endDate + END_TAG;
-        };
+            return START_TAG + startDate + END_TAG + ' &ndash; ' + START_TAG + endDate + END_TAG;
+        }
 
         Q.equal(elroi.fn.formatDateRange('M d, yy', marchOne2011, marchTen2011, {}), parseResult('Mar 1', 'Mar 10, 2011'), 'same month+year, year dropped');
         Q.equal(elroi.fn.formatDateRange('M d, yy', marchOne2011, marchTen2011, {skipRepeatedYear: true}),
