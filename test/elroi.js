@@ -1012,5 +1012,35 @@
         ], {errorMessage: '<p>Identical positive entries shouldn\'t generate errors that prevent graph from showing</p>'});
     });
 
+    Q.test('Visually verify: Increasing precision for graph with low scale ratio doesn\'t happen when labels don\'t have fractional parts', function() {
+        elroi(createElroiGraphContainer(), [
+            { series:
+                [
+                    [
+                        {value : 0},
+                        {value : 2},
+                        {value : 5}
+                    ]
+                ],
+                options : { type: 'line', minYValue: 'auto', unit : 'KWH', precision : 0 }
+            }
+        ], {errorMessage: '<p>There shouldn\'t be fractional part in labels for Y-axis</p>'});
+    });
+
+    Q.test('Visually verify: Increasing precision for graph with low scale ratio', function() {
+        elroi(createElroiGraphContainer(), [
+            { series:
+                [
+                    [
+                        {value : 0},
+                        {value : 2},
+                        {value : 3}
+                    ]
+                ],
+                options : { type: 'line', minYValue: 'auto', unit : 'KWH', precision : 0 }
+            }
+        ], {errorMessage: '<p>There should be fractional part in labels for Y-axis</p>'});
+    });
+
     // Should throw exception if minYValue is greater than maxYValue
 }(QUnit, jQuery, elroi));

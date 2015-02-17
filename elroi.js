@@ -1304,21 +1304,34 @@
         elroi.fn.helpers.getYLabels = getYLabels;
 
         /**
-         * This draws either the y1 or y2 axis, depending on the series data
-         * @param {int} seriesDataIndex The index of the data series associated to this y-axis
-         * @param {number} maxVal The maximum value in the data series
-         * @param {number} minVal The minimum value in the data series
-         * @param {String} unit The units of the data
+         * This draws either the y1 or y2 axis, depending on the series data.
+         * @param {object} The axis for witch labels should be drawn.
          */
-        function drawYLabels(maxVal, minVal, axis) {
+        function drawYLabels(axis) {
 
             // Draw the y labels
             var $yLabels = $('<ul></ul>')
                 .addClass("y-ticks")
                 .addClass(axis.id);
 
-            var precision = graph.options.precision,
-                thousandsSeparator = graph.options.thousandsSeparator,
+            var maxVal = graph.maxVals[axis.seriesIndex],
+                minVal = graph.minVals[axis.seriesIndex],
+                precision = graph.options.precision;
+
+            // The graph can contain only small values and scale ratio can be less than one
+            // (more than one pixel is used per a value unit). And in combination with zero precision this can leads
+            // to situation when labels with fractional numbers are too over-aggressively rounded and it looks confusing.
+            // So in that case precision will be increased.
+            if (precision === 0
+                // scale ratio check
+                && graph.yTicks[axis.seriesIndex] > 1
+                // labels contain fractional numbers check
+                && ((maxVal + Math.abs(minVal)).toFixed(0) % (graph.options.grid.numYLabels - 1)) !== 0) {
+
+                precision++;
+            }
+
+            var thousandsSeparator = graph.options.thousandsSeparator,
                 decimalSeparator = graph.options.decimalSeparator,
                 yLabels = getYLabels(maxVal, minVal, precision),
                 avalaibleArea = graph.height - graph.padding.top - graph.padding.bottom,
@@ -1392,10 +1405,10 @@
             }
 
             if (graph.options.axes.y1.show) {
-                drawYLabels(graph.maxVals[graph.options.axes.y1.seriesIndex], graph.minVals[graph.options.axes.y1.seriesIndex], graph.options.axes.y1);
+                drawYLabels(graph.options.axes.y1);
             }
             if (graph.options.axes.y2.show) {
-                drawYLabels(graph.maxVals[graph.options.axes.y2.seriesIndex], graph.minVals[graph.options.axes.y2.seriesIndex], graph.options.axes.y2);
+                drawYLabels(graph.options.axes.y2);
             }
 
             if (graph.options.axes.x1.show) {
