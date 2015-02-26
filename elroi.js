@@ -1326,7 +1326,7 @@
                 // scale ratio check
                 && graph.yTicks[axis.seriesIndex] > 1
                 // labels contain fractional numbers check
-                && ((maxVal + Math.abs(minVal)).toFixed(0) % (graph.options.grid.numYLabels - 1)) !== 0) {
+                && ((maxVal - minVal).toFixed(0) % (graph.options.grid.numYLabels - 1)) !== 0) {
 
                 precision++;
             }
